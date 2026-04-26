@@ -56,10 +56,13 @@ const Unauthorized: React.FC = () => {
             border: '2px solid #ff6b6b',
           }}
         >
-          <WarningIcon
+          <Box
+            component="img"
+            src="/logo.png"
+            alt="Logo"
             sx={{
-              fontSize: 64,
-              color: 'warning.main',
+              height: 100,
+              width: 'auto',
               mb: 2,
             }}
           />

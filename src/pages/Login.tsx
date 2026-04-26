@@ -194,28 +194,50 @@ const Login: React.FC = () => {
             }}>
               <Slide direction="right" in timeout={800}>
                 <Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <WarningIcon sx={{ 
-                      fontSize: { xs: 36, md: 40 }, 
-                      color: '#FF3B30', 
-                      mr: 1.5,
-                      filter: 'drop-shadow(0 0 8px rgba(255, 59, 48, 0.5))'
-                    }} />
-                    <Typography
-                      variant="h1"
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Box
+                      component="img"
+                      src="/logo.png"
+                      alt="KHIVISION Logo"
                       sx={{
-                        fontWeight: 900,
-                        fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.75rem', lg: '3rem' },
-                        lineHeight: 1.1,
-                        background: 'linear-gradient(135deg, #FF3B30 0%, #DC2626 100%)',
-                        backgroundClip: 'text',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        textShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+                        height: { xs: 80, md: 100 },
+                        mr: 2,
+                        filter: 'drop-shadow(0 0 12px rgba(255, 59, 48, 0.4))',
+                        transition: 'transform 0.3s ease',
+                        '&:hover': {
+                          transform: 'scale(1.05)',
+                        }
                       }}
-                    >
-                      KHIVISION
-                    </Typography>
+                    />
+                    <Box>
+                      <Typography
+                        variant="h1"
+                        sx={{
+                          fontWeight: 900,
+                          fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.75rem', lg: '3rem' },
+                          lineHeight: 1.1,
+                          background: 'linear-gradient(135deg, #FF3B30 0%, #DC2626 100%)',
+                          backgroundClip: 'text',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          textShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+                        }}
+                      >
+                        KHIVISION
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: '#FF3B30',
+                          fontWeight: 800,
+                          letterSpacing: 2,
+                          fontSize: '0.8rem',
+                          mt: -0.5
+                        }}
+                      >
+                        AI ACCIDENT DETECTION
+                      </Typography>
+                    </Box>
                   </Box>
                   
                   <Typography
@@ -365,18 +387,16 @@ const Login: React.FC = () => {
                 >
                   {/* Header */}
                   <Box textAlign="center" mb={3}>
-                    <Box sx={{ 
-                      display: 'inline-flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      mb: 1.5,
-                      p: 1.5,
-                      borderRadius: 3,
-                      background: 'linear-gradient(135deg, #FF3B30 0%, #DC2626 100%)',
-                      boxShadow: '0 8px 24px rgba(255, 59, 48, 0.4)',
-                    }}>
-                      <LoginIcon sx={{ fontSize: 24, color: 'white' }} />
-                    </Box>
+                      <Box
+                        component="img"
+                        src="/logo.png"
+                        alt="Logo"
+                        sx={{ 
+                          height: 110, 
+                          width: 'auto',
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                        }}
+                      />
                     <Typography variant="h4" sx={{ 
                       fontWeight: 800, 
                       mb: 1, 

@@ -171,33 +171,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         borderBottom: '1px solid rgba(255,255,255,0.08)',
       }}>
         <Box sx={{ textAlign: 'center', width: '100%' }}>
-          <Box sx={{
-            width: 48,
-            height: 48,
-            background: 'linear-gradient(135deg, #7a3531dd 0%, #2c2929d0 100%)',
-            borderRadius: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            mx: 'auto',
-            mb: 2,
-            boxShadow: '0 8px 32px rgba(200, 192, 218, 0.3)',
-          }}>
-            <Typography variant="h5" sx={{ 
-              color: 'white',
-              fontWeight: 800,
-            }}>
-              IRS
-            </Typography>
-          </Box>
-          <Typography variant="caption" sx={{ 
-            color: 'rgba(255, 255, 255, 0.96)',
-            fontSize: '0.75rem',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-          }}>
-            Incident Reporting
-          </Typography>
+          <Box
+            component="img"
+            src="/logo.png"
+            alt="KHIVISION Logo"
+            sx={{
+              width: 80,
+              height: 'auto',
+              mx: 'auto',
+              mb: 1,
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+              }
+            }}
+          />
         </Box>
       </Toolbar>
       <Box sx={{ px: 2, py: 3 }}>
