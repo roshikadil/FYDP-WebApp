@@ -171,8 +171,18 @@ const Login: React.FC = () => {
     >
       {/* Animated Background Elements */}
       <FloatingIcon
-        icon={<WarningIcon sx={{ fontSize: 48, color: alpha('#FF3B30', 0.2) }} />}
-        position={{ position: 'absolute', top: 30, left: 30 }}
+        icon={
+          <Box
+            component="img"
+            src="/logo.png"
+            sx={{
+              height: 80,
+              opacity: 0.9,
+              filter: 'drop-shadow(0 4px 12px rgba(255, 59, 48, 0.5))',
+            }}
+          />
+        }
+        position={{ position: 'absolute', top: 40, left: 40 }}
       />
       
       <FloatingIcon

@@ -218,6 +218,7 @@ const HospitalDashboard: React.FC = () => {
     totalSteps: number;
     incidentId: string;
   } | null>(null);
+  const readyToSimulateRef = useRef<Map<string, any>>(new Map());
 
   // Statistics calculations
   const incomingCases = incomingIncidents.length;
@@ -325,7 +326,12 @@ const HospitalDashboard: React.FC = () => {
       const { step, totalSteps, startLat, startLng, targetLat, targetLng } = simulationStateRef.current;
 
       if (step >= totalSteps) {
-        stopSimulation();
+        if (simulationTimerRef.current) {
+          clearInterval(simulationTimerRef.current);
+          simulationTimerRef.current = null;
+        }
+        // DO NOT call stopSimulation() here - we want isSimulating to stay true
+        // so that handleLocationUpdate continues to be ignored until handleArrival.
         setSimLocation([targetLat, targetLng]);
         setAmbulanceLocations(prev => ({
           ...prev,
@@ -425,20 +431,34 @@ const HospitalDashboard: React.FC = () => {
       console.log('🔄 INCIDENT UPDATED:', incident);
       loadHospitalData();
       
-      // When driver starts transporting, run a MATCHING simulation (scene → hospital)
+      // When driver starts transporting, mark it as ready for simulation
+      // Simulation will actually start on the first location update to stay perfectly synced
       if (incident.driverStatus === 'transporting') {
         const incidentId = incident.id || incident._id;
         if (incidentId && !autoSimulatedIdsRef.current.has(incidentId)) {
-          autoSimulatedIdsRef.current.add(incidentId);
           const sceneCoords = getSafeCoordinates(incident.location);
           if (sceneCoords) {
-            // Start simulation from scene to hospital — same 60 steps as driver
-            startSimulation(JINNAH_HOSPITAL_COORDS[0], JINNAH_HOSPITAL_COORDS[1], incidentId, sceneCoords[0], sceneCoords[1]);
+            const hReq = (incident as any).hospitalRequest;
+            let targetLat = JINNAH_HOSPITAL_COORDS[0];
+            let targetLng = JINNAH_HOSPITAL_COORDS[1];
+            
+            if (hReq && hReq.hospitalLatitude && hReq.hospitalLongitude) {
+              targetLat = Number(hReq.hospitalLatitude);
+              targetLng = Number(hReq.hospitalLongitude);
+            }
+            
+            readyToSimulateRef.current.set(incidentId, {
+              targetLat,
+              targetLng,
+              startLat: sceneCoords[0],
+              startLng: sceneCoords[1]
+            });
+            console.log(`🏥 Incident ${incidentId} ready for simulation. Waiting for driver movement...`);
           }
-          // Auto-open tracking dialog
+          
+          // Auto-open tracking dialog using the incident directly
           if (!trackingDialog) {
-            const inc = incomingIncidents.find(i => i.id === incidentId || i._id === incidentId);
-            if (inc) handleTrackPatient(inc);
+            handleTrackPatient(incident);
           }
         }
       }
@@ -446,10 +466,23 @@ const HospitalDashboard: React.FC = () => {
 
     // During simulation, ignore socket updates so marker stays on the line
     const handleLocationUpdate = (data: any) => {
+      const incidentId = data.incidentId;
+      
+      // If we were waiting for this driver to start their journey, start our simulation now
+      if (readyToSimulateRef.current.has(incidentId)) {
+        const simData = readyToSimulateRef.current.get(incidentId);
+        readyToSimulateRef.current.delete(incidentId);
+        autoSimulatedIdsRef.current.add(incidentId);
+        
+        console.log(`🚀 Driver ${incidentId} started moving. Starting hospital simulation...`);
+        startSimulation(simData.targetLat, simData.targetLng, incidentId, simData.startLat, simData.startLng);
+        return;
+      }
+
       if (isSimulating) return; // Don't override simulation position
       setAmbulanceLocations(prev => ({
         ...prev,
-        [data.incidentId]: {
+        [incidentId]: {
           lat: data.latitude,
           lng: data.longitude,
           timestamp: new Date()

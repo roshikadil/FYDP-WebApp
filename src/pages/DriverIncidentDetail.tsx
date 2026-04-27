@@ -1032,8 +1032,8 @@ const DriverIncidentDetail: React.FC = () => {
                     sx={{
                       p: 2, borderRadius: 3, cursor: 'pointer',
                       display: 'flex', alignItems: 'center', gap: 2,
-                      bgcolor: '#E65100', color: 'white',
-                      '&:hover': { bgcolor: '#EF6C00' },
+                      bgcolor: '#C62828', color: 'white',
+                      '&:hover': { bgcolor: '#C62828' },
                       mb: 2
                     }}
                   >

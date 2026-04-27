@@ -89,6 +89,7 @@ import IncidentMap from "../components/IncidentMap";
 import { useRealtimeIncidents } from "../hooks/useRealtimeIncidents";
 import { SocketService } from "../services/SocketService";
 import AnalyticsConsole from "../components/AnalyticsConsole";
+import LocationDisplay from "../components/LocationDisplay";
 
 // Date utilities
 import { format, formatDistanceToNow, parseISO } from "date-fns";
@@ -410,9 +411,11 @@ const IncidentCard = ({
             >
               <LocationIcon fontSize="small" />
             </Avatar>
-            <Typography variant="body2" color="text.secondary" noWrap>
-              {incident.location?.address || "Unknown location"}
-            </Typography>
+            <LocationDisplay 
+              address={incident.location?.address} 
+              coordinates={incident.location?.coordinates}
+              noWrap
+            />
           </Box>
           <Box display="flex" alignItems="center" gap={1}>
             <Avatar

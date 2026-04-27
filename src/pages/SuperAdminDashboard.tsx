@@ -93,6 +93,7 @@ import SuperAdminService, {
 } from "../services/SuperAdminService";
 import AuthService, { User } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
+import LocationDisplay from "../components/LocationDisplay";
 
 // Register ChartJS components
 ChartJS.register(
@@ -2245,9 +2246,11 @@ const SuperAdminDashboard: React.FC = () => {
                                           <Typography variant="body2" sx={{ mb: 1 }}>
                                             {incident.description?.substring(0, 30) || 'No description'}...
                                           </Typography>
-                                          <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
-                                            {incident.location?.address?.split(',')[0] || 'Unknown'}
-                                          </Typography>
+                                          <LocationDisplay 
+                                              address={incident.location?.address} 
+                                              coordinates={incident.location?.coordinates}
+                                              noWrap
+                                            />
                                           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                                             <Chip
                                               label="Completed"

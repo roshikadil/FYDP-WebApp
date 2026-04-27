@@ -33,6 +33,7 @@ import {
   Cancel as CancelIcon,
 } from '@mui/icons-material';
 import { HospitalIncident } from '../services/hospitalService';
+import { isCoordinates, getAddressFromCoordinates } from '../utils/locationUtils';
 
 interface PatientDetailsDialogProps {
   open: boolean;
@@ -53,6 +54,25 @@ const PatientDetailsDialog: React.FC<PatientDetailsDialogProps> = ({
   onAccept,
   onReject
 }) => {
+  const [resolvedAddress, setResolvedAddress] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const resolveLocation = async () => {
+      if (incident?.location?.address && isCoordinates(incident.location.address)) {
+        const coords = incident.location.coordinates;
+        if (coords && coords.length === 2) {
+          // Note: Backend might store as [lng, lat], Nominatim wants [lat, lng]
+          // Based on backend code: const [longitude, latitude] = req.body.location.coordinates;
+          const address = await getAddressFromCoordinates(coords[1], coords[0]);
+          if (address) setResolvedAddress(address);
+        }
+      } else {
+        setResolvedAddress(null);
+      }
+    };
+    resolveLocation();
+  }, [incident]);
+
   if (!incident) return null;
 
   const getStatusColor = (status?: string) => {
@@ -216,7 +236,7 @@ const PatientDetailsDialog: React.FC<PatientDetailsDialogProps> = ({
                   </ListItemIcon>
                   <ListItemText 
                     primary="Address" 
-                    secondary={formatAddress(incident.location?.address || 'Unknown location')} 
+                    secondary={formatAddress(resolvedAddress || incident.location?.address || 'Unknown location')} 
                   />
                 </ListItem>
                 {incident.location?.coordinates && (
